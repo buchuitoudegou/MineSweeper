@@ -3,8 +3,8 @@ import { IMineButton, IPosition } from '../typings';
 export function initialMap(srcMap: IMineButton[][]) {
   for (let i = 0; i < 99; ++i) {
     while (true) {
-      const x = Math.round(Math.random() * srcMap.length);
-      const y = Math.round(Math.random() * srcMap[0].length);
+      const x = Math.round(Math.random() * (srcMap.length - 1));
+      const y = Math.round(Math.random() * (srcMap[0].length - 1));
       if (srcMap[x][y].isMine === false) {
         srcMap[x][y].isMine = true;
         break;

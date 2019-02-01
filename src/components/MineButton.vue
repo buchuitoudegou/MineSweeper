@@ -27,3 +27,11 @@ export default class MineButton extends Vue {
   }
 }
 </script>
+<style scoped>
+.mine-button {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+</style>
