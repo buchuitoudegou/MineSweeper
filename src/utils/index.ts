@@ -29,3 +29,7 @@ export function initialMap(srcMap: IMineButton[][]) {
     }
   }
 }
+
+export function openButton(srcMap: IMineButton[][], pos: IPosition) {
+  // noop
+}
