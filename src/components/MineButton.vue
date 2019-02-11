@@ -1,6 +1,6 @@
 <template>
 <div>
-  <a-button class="mine-button">{{ content }}</a-button>
+  <a-button class="mine-button" @click="clickEventHandler" @contextmenu="flagEventHandler">{{ content }}</a-button>
 </div>
 </template>
 <script lang="ts">
@@ -12,18 +12,16 @@ import { IPosition } from '../typings';
 export default class MineButton extends Vue {
   @Prop(String) content !: string;
   @Prop() position !: IPosition;
-  mouted() {
-    const element = document.querySelector('.mine-button');
-    if (element) {
-      document.oncontextmenu = () => false;
-      element.addEventListener('mousedown', (event: any) => {
-        if (event.which === 3) {
-          this.$emit('flag', this.position);
-        } else if (event.which === 4) {
-          this.$emit('open', this.position);
-        }
-      });
-    }
+  
+  flagEventHandler(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.$emit('flag', this.position);
+    return false;
+  }
+
+  clickEventHandler() {
+    this.$emit('open', this.position);
   }
 }
 </script>
