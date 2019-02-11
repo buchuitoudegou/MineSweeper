@@ -1,13 +1,25 @@
 <template>
-<div style="display: flex; height: 100vh; justify-content: center; align-items: center;" id="container">
-  <div id="mine-wrapper">
-    <div class="row-container" v-for="(row,idx) of srcMap" :key="idx">
-      <mine-button v-for="(mine, i) of row" :key="idx * 10 + i" 
-      :position="{ x: idx, y: i }"
-      :content="String(mine.showContent)" 
-      @open="openBtn"
-      @flag="flagBtn"></mine-button>
-    </div>
+<div id="container">
+  <div style="height: 20%; width: 100%; background-color: black; 
+  display: flex; align-items: center; justify-content: center;">
+    <h1 style="color: white; font-size: 3rem;">World of MineSweeper</h1>
+  </div>
+  <div id="main-container">
+    <el-card id="controler">
+      <a-button @click="restart">restart</a-button>
+      <h2>remaining mines: {{ restMine - wrongFlag }}</h2>
+    </el-card>
+    <el-card id="mine-wrapper">
+      <div class="row-container" v-for="(row,idx) of srcMap" :key="idx">
+        <mine-button v-for="(mine, i) of row" :key="idx * 10 + i" 
+        :position="{ x: idx, y: i }"
+        :content="String(mine.showContent)"
+        :isOpen="mine.isOpen"
+        :isFlag="mine.isFlag"
+        @open="openBtn"
+        @flag="flagBtn"></mine-button>
+      </div>
+    </el-card>
   </div>
 </div>
 </template>
@@ -25,10 +37,41 @@ import { initialMap, ROW_COUNT, COL_COUNT, MINE_COUNT, openButton } from '../uti
 export default class MineSweeper extends Vue {
   srcMap: IMineButton[][] = [[]];
 
+  isComplete: boolean = false;
+
   restMine: number = MINE_COUNT;
   wrongFlag: number = 0;
 
+  restart() {
+    this.restMine = MINE_COUNT;
+    this.wrongFlag = 0;
+    this.isComplete = false;
+    this.srcMap = [];
+    for (let i = 0; i < ROW_COUNT; ++i) {
+      const temp: IMineButton[] = [];
+      for (let j = 0; j < COL_COUNT; ++j) {
+        const mine: IMineButton = {
+          isMine: false,
+          postion: { x: i, y: j },
+          isOpen: false,
+          isFlag: false,
+          showContent: ' ',
+          realContent: 0
+        };
+        temp.push(mine);
+      }
+      this.srcMap.push(temp);
+    }
+    initialMap(this.srcMap);
+  }
+
   openBtn(pos: IPosition) {
+    if (this.isComplete) {
+      return;
+    }
+    if (this.srcMap[pos.x][pos.y].isOpen) {
+      return;
+    }
     if (this.srcMap[pos.x][pos.y].realContent === -1) {
       for (let i = 0; i < ROW_COUNT; ++i) {
         for (let j = 0; j < COL_COUNT; ++j) {
@@ -37,13 +80,20 @@ export default class MineSweeper extends Vue {
           }
         }
       }
-      alert('you lose');
+      this.isComplete = true;
+      setTimeout(() => { alert('you lose'); }, 1000);
     } else {
       openButton(this.srcMap, pos);
     }
   }
 
   flagBtn(pos: IPosition) {
+    if (this.isComplete) {
+      return;
+    }
+    if (this.srcMap[pos.x][pos.y].isOpen) {
+      return;
+    }
     if (this.srcMap[pos.x][pos.y].isFlag === true) {
       this.srcMap[pos.x][pos.y].isFlag = false;
       this.srcMap[pos.x][pos.y].showContent = ' ';
@@ -62,7 +112,8 @@ export default class MineSweeper extends Vue {
       }
     }
     if (this.restMine === 0 && this.wrongFlag === 0) {
-      alert('you win');
+      this.isComplete = true;
+      setTimeout(() => { alert('you win'); }, 1000);
     }
   }
 
@@ -87,9 +138,31 @@ export default class MineSweeper extends Vue {
   }
 }
 </script>
-<style scoped>
+<style>
 .row-container {
   display: flex;
   justify-content: flex-start;
+}
+#mine-wrapper {
+  padding: 1rem;
+  background-color: white;
+}
+#container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fafafa;
+}
+#main-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+#controler .el-card__body {
+  display: flex;
+  justify-content: space-around;
 }
 </style>
