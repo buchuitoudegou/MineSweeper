@@ -5,11 +5,11 @@
     <h1 style="color: white; font-size: 3rem;">World of MineSweeper</h1>
   </div>
   <div id="main-container">
-    <el-card id="controler">
+    <a-card id="controler">
       <a-button @click="restart">restart</a-button>
       <h2>remaining mines: {{ restMine - wrongFlag }}</h2>
-    </el-card>
-    <el-card id="mine-wrapper">
+    </a-card>
+    <a-card id="mine-wrapper">
       <div class="row-container" v-for="(row,idx) of srcMap" :key="idx">
         <mine-button v-for="(mine, i) of row" :key="idx * 10 + i" 
         :position="{ x: idx, y: i }"
@@ -19,7 +19,7 @@
         @open="openBtn"
         @flag="flagBtn"></mine-button>
       </div>
-    </el-card>
+    </a-card>
   </div>
 </div>
 </template>
@@ -161,8 +161,11 @@ export default class MineSweeper extends Vue {
   flex-direction: column;
   justify-content: space-around;
 }
-#controler .el-card__body {
+#controler .ant-card-body {
   display: flex;
   justify-content: space-around;
+}
+.ant-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
 }
 </style>
