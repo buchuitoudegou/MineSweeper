@@ -19,7 +19,7 @@ export default class MineButton extends Vue {
     type: boolean,
     require: true
   };
-  
+
   flagEventHandler(event: Event) {
     event.preventDefault();
     event.stopPropagation();
