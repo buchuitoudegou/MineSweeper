@@ -37,7 +37,7 @@ export function initialMap(srcMap: IMineButton[][]) {
 
 export function openButton(srcMap: IMineButton[][], pos: IPosition) {
   const queue: IPosition[] = [];
-  const dir = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+  const dir = [[0, 1], [0, -1], [1, 0], [1, -1], [1, 1], [-1, 0], [-1, -1], [-1, 1]];
   queue.push(pos);
   while (queue.length > 0) {
     const cur = queue.pop();
