@@ -69,6 +69,9 @@ export default class MineSweeper extends Vue {
     if (this.isComplete) {
       return;
     }
+    if (this.srcMap[pos.x][pos.y].isFlag) {
+      return;
+    }
     if (this.srcMap[pos.x][pos.y].isOpen) {
       return;
     }
